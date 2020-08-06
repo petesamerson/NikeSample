@@ -7,7 +7,7 @@ import androidx.test.espresso.ViewAssertion
 import androidx.test.espresso.matcher.ViewMatchers
 import org.hamcrest.CoreMatchers
 
-class EspessoUtil {
+class EspressoUtil {
         companion object {
             fun hasItemCount(count: Int): ViewAssertion {
                 return RecyclerViewItemCountAssertion(count)

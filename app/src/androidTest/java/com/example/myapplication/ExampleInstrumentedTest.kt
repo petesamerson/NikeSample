@@ -24,7 +24,7 @@ import org.junit.Before
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
-class SortInstrumentedTest {
+class ExampleInstrumentedTest {
     @get:Rule
     val activityRule = ActivityTestRule(MainActivity::class.java, false, false)
 

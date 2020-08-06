@@ -1,6 +1,6 @@
 package com.example.myapplication.model
 
-import retrofit2.Call
+import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
@@ -10,5 +10,5 @@ interface TermApiInterface {
     @GET("define")
     fun getTerm(
         @Query("term") term:String
-    ): Call<QueryResponse>
+    ): Single<QueryResponse>
 }

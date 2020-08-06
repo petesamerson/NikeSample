@@ -6,7 +6,7 @@
     <string name="retry">retry</string>
     <string name="close">close</string>
     <string-array name="thumb_sort_array">
-        <item>Most Thumbs Down</item>
         <item>Most Thumbs Up</item>
+        <item>Most Thumbs Down</item>
     </string-array>
 </resources>

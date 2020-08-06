@@ -3,29 +3,45 @@ package com.example.myapplication.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.myapplication.model.Thumb
-import com.example.myapplication.model.Term
-import com.example.myapplication.model.TermRepo
-import com.example.myapplication.model.TermResource
+import com.example.myapplication.model.*
+import io.reactivex.disposables.CompositeDisposable
 
-class TermViewModel : ViewModel(){
-    private var repo = TermRepo()
-    private var termsLiveData = MutableLiveData<TermResource>()
+class TermViewModel(private var repo:TermRepo) : ViewModel(){
 
-    fun getSearchTerm(term: String): LiveData<TermResource> {
-        termsLiveData = repo.getSearchTerm(term) as MutableLiveData<TermResource>
-        return termsLiveData as LiveData<TermResource>
+    private val termsMutableLiveData = MutableLiveData<List<Term>>()
+    val termsLiveData:LiveData<List<Term>>
+        get() = termsMutableLiveData
+
+    private val statusMutableLiveData = MutableLiveData<ApiStatus>()
+    val statusLiveData:LiveData<ApiStatus>
+        get() = statusMutableLiveData
+
+    private val disposable = CompositeDisposable()
+
+    fun getSearchTerm(term: String,isRetry: Boolean) {
+        disposable.add(
+            repo.getSearchTerm(term).subscribe({response ->
+                val terms = response.list
+                if(terms.isNotEmpty()) {
+                    statusMutableLiveData.value = ApiStatus.SUCCESS
+                    termsMutableLiveData.value = response.list
+                }
+                else{
+                    statusMutableLiveData.value = ApiStatus.NO_RESULTS
+                }
+            }, {
+                if(!isRetry)
+                    statusMutableLiveData.value = ApiStatus.NETWORK_FAIL
+                else
+                    statusMutableLiveData.value = ApiStatus.NETWORK_RETRY_FAIL
+            })
+        )
     }
 
-    fun sortLiveData(thumb: Thumb):LiveData<TermResource>{
-        var tempList = termsLiveData.value?.terms
-        if (tempList != null) {
-            tempList = sortTermList(tempList,thumb)
+    fun sortLiveData(thumb: Thumb){
+        termsMutableLiveData.value = termsMutableLiveData.value?.let {
+            sortTermList(it,thumb)
         }
-        if (tempList != null) {
-            termsLiveData.value?.terms = tempList
-        }
-        return termsLiveData
     }
 
     fun sortTermList(termList:List<Term>,thumb: Thumb):List<Term>{

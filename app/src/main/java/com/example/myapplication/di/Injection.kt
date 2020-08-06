@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.di
 
 import android.content.Context
 import com.example.myapplication.model.TermRepo

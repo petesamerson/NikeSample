@@ -1,5 +1,5 @@
 package com.example.myapplication.model
 
 enum class ApiStatus {
-    NO_RESULTS, NETWORK_FAIL, SUCCESS
+    SUCCESS, NO_RESULTS, NETWORK_FAIL, NETWORK_RETRY_FAIL
 }
