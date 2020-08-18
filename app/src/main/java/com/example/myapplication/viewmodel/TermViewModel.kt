@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myapplication.model.*
+import com.example.myapplication.resource.EspressoIdlingResource
 import io.reactivex.disposables.CompositeDisposable
 
 class TermViewModel(private var repo:TermRepo) : ViewModel(){
@@ -19,6 +20,7 @@ class TermViewModel(private var repo:TermRepo) : ViewModel(){
     private val disposable = CompositeDisposable()
 
     fun getSearchTerm(term: String,isRetry: Boolean) {
+        EspressoIdlingResource.increment()
         disposable.add(
             repo.getSearchTerm(term).subscribe({response ->
                 val terms = response.list
@@ -29,11 +31,13 @@ class TermViewModel(private var repo:TermRepo) : ViewModel(){
                 else{
                     statusMutableLiveData.value = ApiStatus.NO_RESULTS
                 }
+                EspressoIdlingResource.decrement()
             }, {
                 if(!isRetry)
                     statusMutableLiveData.value = ApiStatus.NETWORK_FAIL
                 else
                     statusMutableLiveData.value = ApiStatus.NETWORK_RETRY_FAIL
+                EspressoIdlingResource.decrement()
             })
         )
     }

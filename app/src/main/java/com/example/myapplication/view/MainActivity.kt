@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(
             this,
-                    TermViewModelFactory(injection.provideTermRepo(this.applicationContext))
+                    TermViewModelFactory(injection.provideTermRepo())
         ).get(TermViewModel::class.java)
 
         rcycl_terms.apply {

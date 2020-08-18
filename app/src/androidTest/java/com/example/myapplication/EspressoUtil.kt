@@ -31,7 +31,7 @@ class EspressoUtil {
 
                 ViewMatchers.assertThat(
                     "RecyclerView item count",
-                    view.adapter!!.itemCount,
+                    view.adapter?.itemCount,
                     CoreMatchers.equalTo(count)
                 )
             }
